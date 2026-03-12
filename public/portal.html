@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Raíces de Salud</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fdf8;
+    }
+    .carousel-item img {
+      height: 500px;
+      object-fit: cover;
+      filter: brightness(0.7);
+    }
+    .carousel-caption {
+      background: rgba(0,0,0,0.4);
+      border-radius: 12px;
+      padding: 20px 30px;
+    }
+    .card-planta {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .card-planta:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15) !important;
+    }
+    .card-planta .card-img-top {
+      height: 220px;
+      object-fit: cover;
+    }
+    .card-planta .card-body {
+      padding: 1.25rem;
+    }
+    .card-planta .nombre-cientifico {
+      font-style: italic;
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+    .btn-ver-mas {
+      background-color: #198754;
+      border-color: #198754;
+      color: #fff;
+      border-radius: 20px;
+      padding: 6px 20px;
+      font-size: 0.9rem;
+    }
+    .btn-ver-mas:hover {
+      background-color: #146c43;
+      border-color: #146c43;
+      color: #fff;
+    }
+    .section-title {
+      color: #198754;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background-color: #198754;
+      margin-top: 6px;
+      border-radius: 2px;
+    }
+    #catalogo {
+      padding: 3rem 0;
+    }
+    .disclaimer-section {
+      padding: 2rem 0;
+    }
+    footer a {
+      color: #c8e6c9;
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #fff;
+    }
+    .modal-header {
+      background-color: #198754;
+      color: #fff;
+    }
+    .modal-header .btn-close {
+      filter: invert(1);
+    }
+    .modal-body h6 {
+      color: #198754;
+      font-weight: 600;
+    }
+    .navbar .form-control:focus {
+      box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.3);
+      border-color: #fff;
+    }
+    .no-results {
+      display: none;
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #6c757d;
+    }
+    .no-results.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top shadow">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-flower1 me-2" viewBox="0 0 16 16">
+          <path d="M6.174 1.184a2 2 0 0 1 3.652 0A2 2 0 0 1 12.99 3.01a2 2 0 0 1 1.826 3.164 2 2 0 0 1 0 3.652 2 2 0 0 1-1.826 3.164 2 2 0 0 1-3.164 1.826 2 2 0 0 1-3.652 0A2 2 0 0 1 3.01 12.99a2 2 0 0 1-1.826-3.164 2 2 0 0 1 0-3.652A2 2 0 0 1 3.01 3.01a2 2 0 0 1 3.164-1.826M8 2a1 1 0 0 0-.865.5 1 1 0 0 1-1.58.17A1 1 0 0 0 4.5 3a1 1 0 0 0 .17.555 1 1 0 0 1-.17 1.58A1 1 0 0 0 4 6a1 1 0 0 0 .555-.17 1 1 0 0 1 1.58.17A1 1 0 0 0 6 7.5a1 1 0 0 1 .17 1.58A1 1 0 0 0 6 10a1 1 0 0 0 .555.17 1 1 0 0 1 .17 1.58A1 1 0 0 0 6 13a1 1 0 0 0 .865-.5 1 1 0 0 1 1.58-.17A1 1 0 0 0 9.5 13a1 1 0 0 0-.17-.555 1 1 0 0 1 .17-1.58A1 1 0 0 0 10 10a1 1 0 0 0-.555.17 1 1 0 0 1-1.58-.17A1 1 0 0 0 8 8.5a1 1 0 0 1-.17-1.58A1 1 0 0 0 8 6a1 1 0 0 0-.555-.17 1 1 0 0 1-.17-1.58A1 1 0 0 0 8 2"/>
+          <path d="M8 2a1 1 0 0 0-.865.5 1 1 0 0 1-1.58.17"/>
+        </svg>
+        Raíces de Salud
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#catalogo">Catálogo de plantas</a>
+          </li>
+        </ul>
+        <form class="d-flex" role="search" onsubmit="return false;">
+          <input class="form-control me-2" type="search" placeholder="Buscar planta..." aria-label="Buscar" id="searchInput" oninput="filtrarPlantas()" onkeydown="buscarEnter(event)">
+          <button class="btn btn-success" onclick="buscarPlanta()">Buscar</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <!-- CAROUSEL -->
+  <div id="carouselPlantas" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselPlantas" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselPlantas" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselPlantas" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="images/paniquita.jpg" style="height: 600px; width: 100%; object-fit:cover;" alt="Jardín de plantas medicinales">
+        <div class="carousel-caption">
+          <h2 class="fw-bold">Medicina Tradicional de Paniquita</h2>
+          <p>Descubre la sabiduría ancestral que ha sanado generaciones a través de las plantas medicinales de nuestra región.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/paniquita2.jpg" style="height:600px; width:100%; object-fit:cover;" alt="Preparación de remedios tradicionales">
+        <div class="carousel-caption">
+          <h2 class="fw-bold">Sabiduría Ancestral en Cada Hoja</h2>
+          <p>Conoce los métodos tradicionales de preparación y uso de las plantas que nuestros antepasados nos legaron.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/paniquita3.jpg" style="height:600px; width:100%; object-fit:cover;" alt="Paisaje andino con plantas medicinales">
+        <div class="carousel-caption">
+          <h2 class="fw-bold">Naturaleza que Cura</h2>
+          <p>Explora el catálogo completo de plantas medicinales que crecen en los suelos de Paniquita y sus alrededores.</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselPlantas" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselPlantas" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+
+  <!-- CATÁLOGO DE PLANTAS -->
+  <section id="catalogo">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="section-title mx-auto">Catálogo de Plantas Medicinales</h2>
+        <p class="text-muted mt-3">Explora nuestra colección de 30 plantas medicinales utilizadas en la medicina tradicional de Paniquita.</p>
+      </div>
+      <div class="row g-4" id="plantasGrid">
+        <!-- Las cards se generan dinámicamente con JavaScript -->
+      </div>
+      <div id="noResults" class="no-results">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#adb5bd" viewBox="0 0 16 16">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg>
+        <h5 class="mt-3">No se encontraron plantas</h5>
+        <p>Intenta con otro nombre o nombre científico.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISCLAIMER -->
+  <section class="disclaimer-section">
+    <div class="container">
+      <div class="alert alert-warning shadow-sm border-0" role="alert">
+        <h5 class="alert-heading fw-bold">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+          </svg>
+          Aviso Importante
+        </h5>
+        <hr>
+        <p class="mb-1">La información presentada en este portal corresponde a usos tradicionales de la medicina ancestral de Paniquita.</p>
+        <p class="mb-1"><strong>No sustituye la consulta médica profesional.</strong></p>
+        <p class="mb-0">Antes de utilizar cualquier planta medicinal, consulte con un profesional de la salud, especialmente en caso de embarazo, enfermedades crónicas o consumo de medicamentos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-success text-white text-center py-4">
+    <div class="container">
+      <h5 class="fw-bold mb-1">Portal Raíces de Salud</h5>
+      <p class="mb-1">Medicina Tradicional en Paniquita</p>
+      <p class="mb-0" id="footerYear"></p>
+    </div>
+  </footer>
+
+  <!-- MODALES (se generan dinámicamente) -->
+  <div id="modalesContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // ==============================
+    // BASE DE DATOS DE PLANTAS
+    // ==============================
+    const plantas = [
+      {
+        id: 1,
+        nombre: "Ajenjo",
+        cientifico: "Artemisia absinthium",
+        imagen: "/images/plants/herbs-leafy.jpg",
+        descripcion: "Planta amarga utilizada tradicionalmente para problemas digestivos y como vermífugo natural.",
+        parteUtilizada: "Hojas y tallos",
+        uso: "Se emplea para aliviar problemas digestivos, estimular el apetito, combatir parásitos intestinales y calmar dolores estomacales.",
+        preparacion: "Preparar una infusión con 1 cucharadita de hojas secas en una taza de agua hirviendo. Dejar reposar por 10 minutos y colar.",
+        empleo: "Tomar una taza antes de las comidas, máximo 2 veces al día. No consumir por períodos prolongados.",
+        advertencia: "No consumir durante el embarazo ni la lactancia. Evitar en niños menores de 12 años. El uso excesivo puede causar convulsiones."
+      },
+      {
+        id: 2,
+        nombre: "Albahaca",
+        cientifico: "Ocimum basilicum",
+        imagen: "/images/plants/herbs-leafy.jpg",
+        descripcion: "Hierba aromática con propiedades digestivas, antiinflamatorias y relajantes.",
+        parteUtilizada: "Hojas frescas o secas",
+        uso: "Se utiliza para calmar dolores de estómago, reducir la inflamación, aliviar el estrés y combatir resfriados.",
+        preparacion: "Preparar infusión con 5-6 hojas frescas o 1 cucharadita de hojas secas en agua hirviendo. Reposar 8 minutos.",
+        empleo: "Tomar 2 a 3 tazas al día después de las comidas. También se puede masticar hojas frescas.",
+        advertencia: "No consumir en exceso durante el embarazo. Personas con trastornos de coagulación deben consultar al médico."
+      },
+      {
+        id: 3,
+        nombre: "Boldo",
+        cientifico: "Peumus boldus",
+        imagen: "/images/plants/herbs-aromatic.jpg",
+        descripcion: "Planta reconocida por sus propiedades hepatoprotectoras y digestivas.",
+        parteUtilizada: "Hojas",
+        uso: "Se emplea para tratar afecciones del hígado, facilitar la digestión, estimular la producción de bilis y aliviar el estreñimiento.",
+        preparacion: "Colocar 1 cucharadita de hojas secas en una taza de agua hirviendo. Dejar reposar 10 minutos y colar.",
+        empleo: "Tomar una taza después de las comidas principales, máximo 3 veces al día.",
+        advertencia: "Contraindicado en personas con obstrucción de vías biliares. No usar durante el embarazo. Evitar uso prolongado."
+      },
+      {
+        id: 4,
+        nombre: "Pacunga",
+        cientifico: "Bidens pilosa",
+        imagen: "/images/plants/herbs-flowers.jpg",
+        descripcion: "Planta silvestre usada en la medicina tradicional para la inflamación y afecciones hepáticas.",
+        parteUtilizada: "Hojas y flores",
+        uso: "Se utiliza para tratar inflamaciones, problemas hepáticos, infecciones urinarias y como cicatrizante de heridas.",
+        preparacion: "Hervir un puñado de hojas frescas en un litro de agua durante 5 minutos. Colar y dejar enfriar.",
+        empleo: "Tomar 2 a 3 tazas al día. Para heridas, aplicar las hojas machacadas directamente sobre la zona afectada.",
+        advertencia: "Consultar con un profesional de salud antes de usar en niños pequeños o mujeres embarazadas."
+      },
+      {
+        id: 5,
+        nombre: "Caléndula",
+        cientifico: "Calendula officinalis",
+        imagen: "/images/plants/herbs-flowers.jpg",
+        descripcion: "Flor medicinal con propiedades antiinflamatorias, cicatrizantes y antisépticas.",
+        parteUtilizada: "Flores",
+        uso: "Se emplea para cicatrizar heridas, tratar quemaduras leves, aliviar inflamaciones de la piel y problemas digestivos.",
+        preparacion: "Para uso externo: preparar infusión concentrada con flores y aplicar con compresas. Para uso interno: infusión suave con 1 cucharadita de pétalos secos.",
+        empleo: "Uso externo: aplicar compresas 2-3 veces al día. Uso interno: tomar 1-2 tazas diarias.",
+        advertencia: "Personas alérgicas a plantas de la familia Asteraceae deben evitar su uso. No aplicar en heridas abiertas profundas."
+      },
+      {
+        id: 6,
+        nombre: "Anís",
+        cientifico: "Pimpinella anisum",
+        imagen: "/images/plants/herbs-seeds.jpg",
+        descripcion: "Semilla aromática con propiedades carminativas y expectorantes.",
+        parteUtilizada: "Semillas",
+        uso: "Se utiliza para aliviar gases intestinales, cólicos, mejorar la digestión y como expectorante natural para la tos.",
+        preparacion: "Machacar ligeramente 1 cucharadita de semillas y agregar a una taza de agua hirviendo. Reposar 10 minutos.",
+        empleo: "Tomar 1 a 3 tazas al día después de las comidas. Para bebés con cólicos, dar pequeñas cucharaditas tibias.",
+        advertencia: "No consumir en grandes cantidades durante el embarazo. Puede causar reacciones alérgicas en personas sensibles."
+      },
+      {
+        id: 7,
+        nombre: "Apio",
+        cientifico: "Apium graveolens",
+        imagen: "/images/plants/herbs-leafy.jpg",
+        descripcion: "Hortaliza medicinal con propiedades diuréticas y depurativas.",
+        parteUtilizada: "Tallos, hojas y semillas",
+        uso: "Se emplea como diurético natural, para reducir la presión arterial, aliviar la retención de líquidos y depurar el organismo.",
+        preparacion: "Preparar jugo fresco con tallos de apio o hervir las semillas en agua durante 10 minutos.",
+        empleo: "Tomar un vaso de jugo en ayunas o 2 tazas de infusión de semillas al día.",
+        advertencia: "Personas con enfermedad renal deben consultar al médico. Evitar consumo excesivo durante el embarazo."
+      },
+      {
+        id: 8,
+        nombre: "Canela",
+        cientifico: "Cinnamomum verum",
+        imagen: "/images/plants/herbs-aromatic.jpg",
+        descripcion: "Especia con propiedades antibacterianas, antiinflamatorias y reguladoras del azúcar en sangre.",
+        parteUtilizada: "Corteza",
+        uso: "Se utiliza para mejorar la digestión, regular niveles de azúcar, combatir resfriados y aliviar dolores menstruales.",
+        preparacion: "Hervir una rama de canela en una taza de agua durante 5 minutos. También se puede agregar canela en polvo a bebidas calientes.",
+        empleo: "Tomar 1 a 2 tazas al día. Se puede combinar con miel para potenciar sus efectos.",
+        advertencia: "No consumir en exceso durante el embarazo ya que puede estimular contracciones uterinas. Diabéticos deben consultar al médico."
+      },
+      {
+        id: 9,
+        nombre: "Geranio rojo",
+        cientifico: "Pelargonium graveolens",
+        imagen: "/images/plants/herbs-flowers.jpg",
+        descripcion: "Planta ornamental y medicinal utilizada como astringente y para problemas de la piel.",
+        parteUtilizada: "Hojas y flores",
+        uso: "Se emplea para tratar heridas menores, como astringente para la piel, aliviar dolores musculares y repeler insectos.",
+        preparacion: "Machacar hojas frescas para obtener su jugo o preparar infusión con hojas secas en agua hirviendo durante 10 minutos.",
+        empleo: "Uso externo: aplicar el jugo sobre la piel afectada. Uso interno: tomar 1 taza de infusión al día.",
+        advertencia: "No ingerir aceite esencial puro. Realizar prueba de sensibilidad antes de aplicar en la piel. Evitar en embarazadas."
+      },
+      {
+        id: 10,
+        nombre: "Ajo",
+        cientifico: "Allium sativum",
+        imagen: "/images/plants/herbs-roots.jpg",
+        descripcion: "Bulbo con potentes propiedades antibacterianas, antivirales y cardiovasculares.",
+        parteUtilizada: "Bulbo (dientes de ajo)",
+        uso: "Se utiliza para fortalecer el sistema inmunológico, reducir la presión arterial, combatir infecciones y mejorar la circulación.",
+        preparacion: "Machacar 1-2 dientes de ajo y dejar reposar 10 minutos antes de consumir. Se puede mezclar con miel o agua tibia.",
+        empleo: "Consumir 1-2 dientes de ajo crudo al día en ayunas. También se puede preparar tintura o jarabe.",
+        advertencia: "Puede interactuar con medicamentos anticoagulantes. Suspender su uso 2 semanas antes de cirugías. Puede causar irritación gástrica."
+      },
+      {
+        id: 11,
+        nombre: "Chilco",
+        cientifico: "Baccharis latifolia",
+        imagen: "/images/plants/herbs-leafy.jpg",
+        descripcion: "Arbusto andino utilizado como antiinflamatorio y para afecciones reumáticas.",
+        parteUtilizada: "Hojas y ramas tiernas",
+        uso: "Se emplea para aliviar dolores reumáticos, reducir inflamaciones, tratar golpes y como febrífugo.",
+        preparacion: "Hervir un puñado de hojas en un litro de agua durante 10 minutos. Para uso externo, calentar las hojas y aplicar como cataplasma.",
+        empleo: "Uso interno: tomar 2 tazas al día. Uso externo: aplicar cataplasma tibia sobre la zona afectada 2 veces al día.",
+        advertencia: "No utilizar por períodos prolongados sin supervisión. Consultar al médico si el dolor persiste."
+      },
+      {
+        id: 12,
+        nombre: "Cedrón",
+        cientifico: "Aloysia citrodora",
+        imagen: "/images/plants/herbs-aromatic.jpg",
+        descripcion: "Hierba aromática con propiedades digestivas, sedantes y antiespasmódicas.",
+        parteUtilizada: "Hojas",
+        uso: "Se utiliza para calmar los nervios, mejorar la digestión, aliviar cólicos y combatir el insomnio.",
+        preparacion: "Colocar 4-5 hojas frescas o 1 cucharadita de hojas secas en una taza de agua hirviendo. Reposar 8 minutos.",
+        empleo: "Tomar 2 a 3 tazas al día. Para el insomnio, tomar una taza antes de dormir.",
+        advertencia: "No consumir en exceso ya que puede causar irritación gástrica. Personas con enfermedades renales deben consultar al médico."
+      },
+      {
+        id: 13,
+        nombre: "Cola de caballo",
+        cientifico: "Equisetum arvense",
+        imagen: "/images/plants/herbs-leafy.jpg",
+        descripcion: "Planta milenaria reconocida por sus propiedades diuréticas y remineralizantes.",
+        parteUtilizada: "Tallos aéreos",
+        uso: "Se emplea como diurético, para fortalecer huesos y uñas, tratar infecciones urinarias y reducir la retención de líquidos.",
+        preparacion: "Hervir 2 cucharadas de tallos secos en medio litro de agua durante 15 minutos. Colar y dejar enfriar.",
+        empleo: "Tomar 2 a 3 tazas al día, preferiblemente entre comidas. No usar por más de 6 semanas consecutivas.",
+        advertencia: "Contraindicado en personas con insuficiencia renal o cardíaca. No combinar con medicamentos diuréticos. Evitar en embarazo."
+      },
+      {
+        id: 14,
+        nombre: "Diente de león",
+        cientifico: "Taraxacum officinale",
+        imagen: "/images/plants/herbs-flowers.jpg",
+        descripcion: "Planta silvestre con propiedades depurativas, diuréticas y hepatoprotectoras.",
+        parteUtilizada: "Hojas, flores y raíz",
+        uso: "Se utiliza para depurar el hígado, estimular la digestión, como diurético natural y para tratar problemas de la piel.",
+        preparacion: "Infusión: 1 cucharada de hojas o raíz seca en agua hirviendo por 10 minutos. Decocción de raíz: hervir 15 minutos.",
+        empleo: "Tomar 2 a 3 tazas al día antes de las comidas. Las hojas frescas se pueden agregar a ensaladas.",
+        advertencia: "Puede interactuar con medicamentos diuréticos y para la diabetes. Personas con cálculos biliares deben consultar al médico."
+      },
+      {
+        id: 15,
+        nombre: "Limoncillo",
+        cientifico: "Cymbopogon citratus",
+        imagen: "/images/plants/herbs-aromatic.jpg",
+        descripcion: "Hierba aromática tropical con propiedades calmantes, digestivas y febrífugas.",
+        parteUtilizada: "Hojas y tallos",
+        uso: "Se emplea para bajar la fiebre, calmar los nervios, aliviar dolores de cabeza y mejorar la digestión.",
+        preparacion: "Cortar 2-3 hojas frescas y hervir en un litro de agua durante 5 minutos. Colar y endulzar si se desea.",
+        empleo: "Tomar 2 a 3 tazas al día. Para la fiebre, tomar caliente y abrigarse para favorecer la sudoración.",
+        advertencia: "No utilizar aceite esencial por vía oral. Embarazadas deben consultar antes de su uso frecuente."
+      },
+      {
+        id: 16,
+        nombre: "Linaza",
+        cientifico: "Linum usitatissimum",
+        imagen: "/images/plants/herbs-seeds.jpg",
+        descripcion: "Semilla rica en fibra y ácidos grasos omega-3 con propiedades laxantes y antiinflamatorias.",
+        parteUtilizada: "Semillas",
+        uso: "Se utiliza para combatir el estreñimiento, reducir el colesterol, aliviar la inflamación intestinal y como emoliente para la piel.",
+        preparacion: "Remojar 1 cucharada de semillas en un vaso de agua durante toda la noche. También se puede triturar y agregar a alimentos.",
+        empleo: "Tomar el agua de remojo en ayunas con las semillas. Consumir 1-2 cucharadas de semillas molidas al día con abundante agua.",
+        advertencia: "Consumir con abundante agua para evitar obstrucción intestinal. No consumir si hay obstrucción del tracto digestivo."
+      },
+      {
+        id: 17,
+        nombre: "Llantén",
+        cientifico: "Plantago major",
+        imagen: "/images/plants/herbs-leafy.jpg",
+        descripcion: "Planta muy común con propiedades cicatrizantes, antiinflamatorias y expectorantes.",
+        parteUtilizada: "Hojas",
+        uso: "Se emplea para cicatrizar heridas, aliviar infecciones respiratorias, reducir la inflamación y tratar úlceras gástricas.",
+        preparacion: "Infusión: 2-3 hojas frescas en agua hirviendo por 10 minutos. Para uso externo: lavar y machacar las hojas.",
+        empleo: "Uso interno: tomar 2-3 tazas al día. Uso externo: aplicar hojas machacadas sobre heridas o inflamaciones como cataplasma.",
+        advertencia: "Puede causar reacciones alérgicas en personas sensibles. Consultar al médico antes de usar en heridas profundas."
+      },
+      {
+        id: 18,
+        nombre: "Ruda",
+        cientifico: "Ruta graveolens",
+        imagen: "/images/plants/herbs-aromatic.jpg",
+        descripcion: "Planta de fuerte aroma utilizada como antiespasmódica y para aliviar dolores menstruales.",
+        parteUtilizada: "Hojas y tallos",
+        uso: "Se utiliza para regular la menstruación, aliviar cólicos, calmar dolores de cabeza y como repelente de insectos.",
+        preparacion: "Infusión suave: 2-3 hojas pequeñas en una taza de agua hirviendo. Reposar 5 minutos y colar. Usar en dosis muy bajas.",
+        empleo: "Tomar máximo 1 taza al día en dosis muy pequeñas. Para uso externo, frotar hojas en la piel para repeler insectos.",
+        advertencia: "CONTRAINDICADA en el embarazo ya que es abortiva. No consumir en grandes dosis. Puede causar fotosensibilidad y dermatitis de contacto."
+      },
+      {
+        id: 19,
+        nombre: "Manzanilla",
+        cientifico: "Matricaria chamomilla",
+        imagen: "/images/plants/herbs-flowers.jpg",
+        descripcion: "Flor medicinal por excelencia, conocida por sus propiedades calmantes y digestivas.",
+        parteUtilizada: "Flores",
+        uso: "Se emplea para calmar los nervios, mejorar la digestión, aliviar cólicos, reducir la inflamación y como antiséptico suave.",
+        preparacion: "Colocar 1 cucharada de flores secas o 2 cucharadas de flores frescas en una taza de agua hirviendo. Reposar 8 minutos.",
+        empleo: "Tomar 3 a 4 tazas al día. También se puede usar para lavados oculares, enjuagues bucales o compresas en la piel.",
+        advertencia: "Personas alérgicas a plantas de la familia Asteraceae deben tener precaución. En dosis muy altas puede causar vómito."
+      },
+      {
+        id: 20,
+        nombre: "Higuerilla",
+        cientifico: "Ricinus communis",
+        imagen: "/images/plants/herbs-leafy.jpg",
+        descripcion: "Planta de la cual se extrae el aceite de ricino, utilizado como laxante y antiinflamatorio.",
+        parteUtilizada: "Semillas (aceite) y hojas",
+        uso: "Se utiliza como laxante potente, para tratar dolores articulares, reducir inflamaciones y como cataplasma para dolores musculares.",
+        preparacion: "Uso externo: calentar hojas y aplicar como cataplasma. El aceite de ricino se usa directamente para aplicación externa.",
+        empleo: "Uso externo: aplicar hojas tibias o aceite sobre la zona afectada. NO ingerir semillas directamente.",
+        advertencia: "LAS SEMILLAS SON ALTAMENTE TÓXICAS si se ingieren crudas. Solo usar aceite de ricino procesado y bajo supervisión. Evitar completamente en embarazo."
+      },
+      {
+        id: 21,
+        nombre: "Mejorana",
+        cientifico: "Origanum majorana",
+        imagen: "/images/plants/herbs-aromatic.jpg",
+        descripcion: "Hierba aromática con propiedades sedantes, digestivas y antiespasmódicas.",
+        parteUtilizada: "Hojas y flores",
+        uso: "Se emplea para calmar la ansiedad, aliviar dolores de cabeza, mejorar la digestión y combatir el insomnio.",
+        preparacion: "Infusión: 1 cucharadita de hojas secas en una taza de agua hirviendo. Reposar 10 minutos y colar.",
+        empleo: "Tomar 2 a 3 tazas al día. Para el insomnio, tomar una taza 30 minutos antes de acostarse.",
+        advertencia: "No usar en grandes dosis durante el embarazo. Personas con úlcera gástrica activa deben consultar al médico."
+      },
+      {
+        id: 22,
+        nombre: "Sauco",
+        cientifico: "Sambucus nigra",
+        imagen: "/images/plants/herbs-flowers.jpg",
+        descripcion: "Árbol medicinal con propiedades antivirales, expectorantes y diaforéticas.",
+        parteUtilizada: "Flores y frutos maduros",
+        uso: "Se utiliza para tratar resfriados, gripe, bajar la fiebre, como expectorante y para fortalecer el sistema inmunológico.",
+        preparacion: "Infusión de flores: 2 cucharadas en agua hirviendo por 10 minutos. Jarabe de frutos: cocinar frutos maduros con azúcar.",
+        empleo: "Tomar 3 tazas al día de infusión caliente durante resfriados. Jarabe: 1 cucharada 3 veces al día.",
+        advertencia: "No consumir frutos crudos ni hojas, corteza o raíces ya que son tóxicas. Solo usar flores y frutos maduros cocidos."
+      },
+      {
+        id: 23,
+        nombre: "Valeriana común",
+        cientifico: "Valeriana officinalis",
+        imagen: "/images/plants/herbs-roots.jpg",
+        descripcion: "Planta reconocida mundialmente por sus potentes propiedades sedantes y relajantes.",
+        parteUtilizada: "Raíz",
+        uso: "Se emplea para tratar el insomnio, reducir la ansiedad, calmar los nervios y aliviar el estrés y la tensión muscular.",
+        preparacion: "Decocción: hervir 1 cucharadita de raíz seca triturada en una taza de agua durante 10 minutos. Colar y dejar enfriar ligeramente.",
+        empleo: "Tomar 1 taza 30-60 minutos antes de dormir. Para la ansiedad, tomar hasta 3 tazas al día en dosis pequeñas.",
+        advertencia: "No combinar con medicamentos sedantes ni alcohol. Puede causar somnolencia, no conducir tras su consumo. Evitar uso prolongado sin supervisión."
+      },
+      {
+        id: 24,
+        nombre: "Verbena",
+        cientifico: "Verbena officinalis",
+        imagen: "/images/plants/herbs-leafy.jpg",
+        descripcion: "Hierba medicinal con propiedades relajantes, digestivas y antiinflamatorias.",
+        parteUtilizada: "Hojas y flores",
+        uso: "Se utiliza para calmar los nervios, aliviar dolores de cabeza, mejorar la digestión y como antiinflamatorio.",
+        preparacion: "Infusión: 1 cucharadita de planta seca en una taza de agua hirviendo. Reposar 10 minutos y colar.",
+        empleo: "Tomar 2 a 3 tazas al día. Para dolores de cabeza, aplicar compresas frías con la infusión en la frente.",
+        advertencia: "Contraindicada durante el embarazo. No usar en personas con hipotiroidismo sin consultar al médico."
+      },
+      {
+        id: 25,
+        nombre: "Suelda con suelda",
+        cientifico: "Symphytum officinale",
+        imagen: "/images/plants/herbs-roots.jpg",
+        descripcion: "Planta tradicional utilizada para acelerar la cicatrización de huesos y tejidos.",
+        parteUtilizada: "Raíz y hojas",
+        uso: "Se emplea para tratar fracturas, esguinces, golpes, inflamaciones articulares y como cicatrizante de heridas.",
+        preparacion: "Cataplasma: rallar la raíz fresca y mezclar con un poco de agua hasta formar una pasta. Para infusión externa: hervir hojas 15 minutos.",
+        empleo: "Solo uso externo: aplicar cataplasma sobre la zona afectada y cubrir con un vendaje. Renovar cada 12 horas.",
+        advertencia: "SOLO USO EXTERNO. No ingerir ya que contiene alcaloides pirrolizidínicos que son tóxicos para el hígado. No aplicar sobre heridas abiertas."
+      },
+      {
+        id: 26,
+        nombre: "Discance de loma",
+        cientifico: "Chuquiraga jussieui",
+        imagen: "/images/plants/herbs-flowers.jpg",
+        descripcion: "Planta nativa de los páramos andinos utilizada como antiinflamatoria y para afecciones renales.",
+        parteUtilizada: "Flores y hojas",
+        uso: "Se utiliza para tratar infecciones urinarias, problemas renales, inflamaciones y como depurativo del organismo.",
+        preparacion: "Hervir un puñado de flores y hojas en un litro de agua durante 10 minutos. Colar y dejar enfriar.",
+        empleo: "Tomar 2 a 3 tazas al día durante una semana. Descansar una semana antes de retomar.",
+        advertencia: "Consultar con un profesional de salud antes de usar en caso de enfermedades renales graves. No usar en embarazo."
+      },
+      {
+        id: 27,
+        nombre: "Menta",
+        cientifico: "Mentha piperita",
+        imagen: "/images/plants/herbs-leafy.jpg",
+        descripcion: "Hierba refrescante con propiedades digestivas, analgésicas y descongestionantes.",
+        parteUtilizada: "Hojas",
+        uso: "Se emplea para aliviar dolores de estómago, reducir náuseas, combatir el mal aliento y descongestionar vías respiratorias.",
+        preparacion: "Infusión: 5-6 hojas frescas o 1 cucharadita de hojas secas en agua hirviendo. Reposar 8 minutos.",
+        empleo: "Tomar 2 a 3 tazas al día. Para descongestionar, inhalar el vapor de la infusión caliente.",
+        advertencia: "No dar a niños menores de 3 años. Puede empeorar el reflujo gastroesofágico. Evitar aceite esencial puro por vía oral."
+      },
+      {
+        id: 28,
+        nombre: "Salvia negra",
+        cientifico: "Salvia officinalis",
+        imagen: "/images/plants/herbs-aromatic.jpg",
+        descripcion: "Planta aromática con propiedades antisépticas, astringentes y reguladoras hormonales.",
+        parteUtilizada: "Hojas",
+        uso: "Se utiliza para aliviar dolores de garganta, regular la sudoración excesiva, mejorar la digestión y como antiséptico bucal.",
+        preparacion: "Infusión: 1 cucharadita de hojas secas en agua hirviendo por 10 minutos. Para gargarismos: preparar infusión más concentrada.",
+        empleo: "Tomar 2 tazas al día. Para dolor de garganta, hacer gargarismos con la infusión tibia 3 veces al día.",
+        advertencia: "Contraindicada en embarazo y lactancia. No usar por períodos prolongados en dosis altas. Epilépticos deben evitar su uso."
+      },
+      {
+        id: 29,
+        nombre: "Sábila",
+        cientifico: "Aloe vera",
+        imagen: "/images/plants/herbs-aloe.jpg",
+        descripcion: "Planta suculenta con extraordinarias propiedades cicatrizantes, hidratantes y digestivas.",
+        parteUtilizada: "Gel interior de las hojas (cristal)",
+        uso: "Se emplea para tratar quemaduras, cicatrizar heridas, hidratar la piel, aliviar la gastritis y como laxante suave.",
+        preparacion: "Cortar una hoja, retirar la cáscara y extraer el gel transparente. Para uso interno: licuar el gel con agua o jugo de fruta.",
+        empleo: "Uso externo: aplicar gel directamente sobre la piel. Uso interno: tomar 1-2 cucharadas de gel licuado al día en ayunas.",
+        advertencia: "El acíbar (sustancia amarilla) es un laxante fuerte que puede causar cólicos. Evitar en embarazo. No aplicar sobre heridas infectadas."
+      },
+      {
+        id: 30,
+        nombre: "Hinojo",
+        cientifico: "Foeniculum vulgare",
+        imagen: "/images/plants/herbs-seeds.jpg",
+        descripcion: "Planta aromática con propiedades carminativas, galactogogas y digestivas.",
+        parteUtilizada: "Semillas, hojas y bulbo",
+        uso: "Se utiliza para aliviar gases, cólicos en bebés, estimular la producción de leche materna y mejorar la digestión.",
+        preparacion: "Machacar ligeramente 1 cucharadita de semillas y añadir a una taza de agua hirviendo. Reposar 10 minutos y colar.",
+        empleo: "Tomar 2 a 3 tazas al día después de las comidas. Para bebés, dar cucharaditas pequeñas de infusión tibia.",
+        advertencia: "No usar aceite esencial en niños ni embarazadas. Personas con alergia al apio pueden tener reacción cruzada. Evitar dosis excesivas."
+      }
+    ];
+
+    // ==============================
+    // MAPEO DE IMÁGENES POR CATEGORÍA
+    // ==============================
+    const imageMap = {
+      'leafy': '/images/plants/herbs-leafy.jpg',
+      'flowers': '/images/plants/herbs-flowers.jpg',
+      'roots': '/images/plants/herbs-roots.jpg',
+      'seeds': '/images/plants/herbs-seeds.jpg',
+      'aloe': '/images/plants/herbs-aloe.jpg',
+      'aromatic': '/images/plants/herbs-aromatic.jpg'
+    };
+
+    // ==============================
+    // GENERAR CARDS Y MODALES
+    // ==============================
+    function generarCards() {
+      const grid = document.getElementById('plantasGrid');
+      const modalesContainer = document.getElementById('modalesContainer');
+
+      plantas.forEach(planta => {
+        // Card
+        const col = document.createElement('div');
+        col.className = 'col-md-4 planta-card';
+        col.setAttribute('data-nombre', planta.nombre.toLowerCase());
+        col.setAttribute('data-cientifico', planta.cientifico.toLowerCase());
+        col.innerHTML = `
+          <div class="card card-planta shadow h-100">
+            <img src="${planta.imagen}" class="card-img-top" alt="${planta.nombre}">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title fw-bold">${planta.nombre}</h5>
+              <p class="nombre-cientifico mb-2">${planta.cientifico}</p>
+              <p class="card-text flex-grow-1">${planta.descripcion}</p>
+              <button class="btn btn-ver-mas mt-2 align-self-start" data-bs-toggle="modal" data-bs-target="#modal${planta.id}">
+                Ver más
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(col);
+
+        // Modal
+        const modal = document.createElement('div');
+        modal.innerHTML = `
+          <div class="modal fade" id="modal${planta.id}" tabindex="-1" aria-labelledby="modalLabel${planta.id}" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalLabel${planta.id}">${planta.nombre}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-5 mb-3 mb-md-0">
+                      <img src="${planta.imagen}" class="img-fluid rounded shadow-sm" alt="${planta.nombre}">
+                    </div>
+                    <div class="col-md-7">
+                      <h4 class="fw-bold text-success">${planta.nombre}</h4>
+                      <p class="fst-italic text-muted">${planta.cientifico}</p>
+                      
+                      <h6 class="mt-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                          <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                        </svg>
+                        Parte utilizada
+                      </h6>
+                      <p>${planta.parteUtilizada}</p>
+                      
+                      <h6>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                        </svg>
+                        Uso tradicional
+                      </h6>
+                      <p>${planta.uso}</p>
+                      
+                      <h6>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                        </svg>
+                        Preparación
+                      </h6>
+                      <p>${planta.preparacion}</p>
+                      
+                      <h6>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                        </svg>
+                        Modo de empleo
+                      </h6>
+                      <p>${planta.empleo}</p>
+                      
+                      <div class="alert alert-danger mt-3 mb-0" role="alert">
+                        <h6 class="alert-heading fw-bold mb-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                          </svg>
+                          Advertencia
+                        </h6>
+                        <p class="mb-0 small">${planta.advertencia}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        modalesContainer.appendChild(modal.firstElementChild);
+      });
+    }
+
+// ==============================
+// BUSCADOR / FILTRO
+// ==============================
+function filtrarPlantas() {
+  const texto = document.getElementById('searchInput').value.toLowerCase().trim();
+  const cards = document.querySelectorAll('.planta-card');
+  const noResults = document.getElementById('noResults');
+  let visibles = 0;
+
+  cards.forEach(card => {
+    const nombre = card.getAttribute('data-nombre');
+    const cientifico = card.getAttribute('data-cientifico');
+
+    if (nombre.includes(texto) || cientifico.includes(texto)) {
+      card.style.display = '';
+      visibles++;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  if (visibles === 0 && texto !== '') {
+    noResults.classList.add('show');
+  } else {
+    noResults.classList.remove('show');
+  }
+}
+
+
+// ==============================
+// BUSCAR Y REDIRIGIR A LA PLANTA
+// ==============================
+function buscarPlanta() {
+
+  const texto = document.getElementById('searchInput').value.toLowerCase().trim();
+  const cards = document.querySelectorAll('.planta-card');
+
+  for (let card of cards) {
+
+    const nombre = card.getAttribute('data-nombre');
+    const cientifico = card.getAttribute('data-cientifico');
+
+    if (nombre.includes(texto) || cientifico.includes(texto)) {
+
+      cards.forEach(c => c.style.display = "none");
+      card.style.display = "";
+
+      card.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+      break;
+    }
+  }
+}
+
+
+// ==============================
+// ENTER EN EL BUSCADOR
+// ==============================
+function buscarEnter(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    buscarPlanta();
+  }
+}
+    // ==============================
+    // AÑO ACTUAL EN FOOTER
+    // ==============================
+    document.getElementById('footerYear').textContent = new Date().getFullYear() + ' — Todos los derechos reservados';
+
+    // ==============================
+    // INICIALIZAR
+    // ==============================
+    generarCards();
+  </script>
+</body>
+</html>
